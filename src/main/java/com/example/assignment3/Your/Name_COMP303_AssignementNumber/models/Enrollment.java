@@ -1,4 +1,5 @@
 package com.example.assignment3.Your.Name_COMP303_AssignementNumber.models;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +18,6 @@ public class Enrollment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private int id;
     private String studentId;
     private String courseId;

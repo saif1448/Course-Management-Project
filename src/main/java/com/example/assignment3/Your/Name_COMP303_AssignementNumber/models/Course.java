@@ -8,23 +8,22 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 @Entity
-@Table(name="course")
+@Table(name = "course")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString
 public class Course {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String courseCode;
     private String CourseTitle;
     private String couseHours;
     private String deliverCampus;
     private String deliverMethod;
-
-    // DeliverMethod (string, either "online" or "onsite")
-
-
 
 }

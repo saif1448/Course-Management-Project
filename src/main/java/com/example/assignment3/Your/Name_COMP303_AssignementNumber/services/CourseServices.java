@@ -58,29 +58,37 @@ public class CourseServices {
         return courseRepository.save(course);
     }
 
-    public Course modifyCourse(int id, CourseDTO courseDto){
+    public Course modifyCourse(int id, CourseDTO courseDto) {
         Course course = new Course();
-        if(courseDto.courseCode() != null){
+        if (courseDto.courseCode() != null) {
             course = modifyCourseCode(id, courseDto.courseCode());
         }
-        if(courseDto.courseTitle() != null){
+        if (courseDto.courseTitle() != null) {
             course = modifyCourseTitle(id, courseDto.courseTitle());
         }
-        if(courseDto.couseHours() != null){
+        if (courseDto.couseHours() != null) {
             course = modifyCourseCourseHours(id, courseDto.couseHours());
         }
-        if(courseDto.deliverCampus() != null){
+        if (courseDto.deliverCampus() != null) {
             course = modifyCourseDeliverCampus(id, courseDto.deliverCampus());
         }
-        if(courseDto.deliverMethod() != null){
+        if (courseDto.deliverMethod() != null) {
             course = modifyCourseDeliverMethod(id, courseDto.deliverMethod());
         }
 
         return course;
     }
 
-    // public boolean removeCourse(int id) {
+    public Course removeCourse(int id) {
 
-    // }
+        Optional<Course> entity = courseRepository.findById(id);
+
+        Course course = entity.orElse(null);
+        if (course != null) {
+            courseRepository.delete(course);
+        }
+
+        return course;
+    }
 
 }
