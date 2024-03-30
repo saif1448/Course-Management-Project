@@ -3,6 +3,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.models.Enrollment;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.models.DTO.EnrollmentDTO;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.services.EnrollmentServices;
+
+import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +24,7 @@ public class EnrollmentController {
     EnrollmentServices enrollmentServices;
 
     @PostMapping("/create")
-    public Enrollment createNewEnrollment(@RequestBody Enrollment enrollment) {
+    public Enrollment createNewEnrollment(@Valid @RequestBody Enrollment enrollment) {
         return enrollmentServices.addNewEnrollment(enrollment);
     }
 

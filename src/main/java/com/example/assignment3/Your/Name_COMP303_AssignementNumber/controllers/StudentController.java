@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.models.Student;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.models.DTO.StudentDTO;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.services.StudentServices;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +25,7 @@ public class StudentController {
     StudentServices studentServices;
 
     @PostMapping("/create")
-    public Student createNewStudent(@RequestBody Student student) {
+    public Student createNewStudent(@Valid @RequestBody Student student) {
         return studentServices.addNewtStudent(student);
     }
 

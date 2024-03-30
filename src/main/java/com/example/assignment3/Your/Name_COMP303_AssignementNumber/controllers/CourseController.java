@@ -99,26 +99,19 @@ public class CourseController {
     // return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     // }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleInvalidArgumentsForCourse(MethodArgumentNotValidException exception) {
+    // @ExceptionHandler(MethodArgumentNotValidException.class)
+    // public ResponseEntity<?>
+    // handleInvalidArgumentsForCourse(MethodArgumentNotValidException exception) {
 
-        Map<String, String> errors = new HashMap<String, String>();
+    // Map<String, String> errors = new HashMap<String, String>();
 
-        for (var error : exception.getBindingResult().getAllErrors()) {
-            String fieldName = ((FieldError) error).getField();
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        }
+    // for (var error : exception.getBindingResult().getAllErrors()) {
+    // String fieldName = ((FieldError) error).getField();
+    // String errorMessage = error.getDefaultMessage();
+    // errors.put(fieldName, errorMessage);
+    // }
+    // return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 
-        // exception.getBindingResult().getAllErrors()
-        // .forEach(error -> {
-        // String fieldName = ((FieldError) error).getField();
-        // String errorMessage = error.getDefaultMessage();
-        // errors.put(fieldName, errorMessage);
-        // });
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-
-    }
+    // }
 
 }
