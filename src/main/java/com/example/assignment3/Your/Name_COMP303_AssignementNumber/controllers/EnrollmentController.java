@@ -1,5 +1,8 @@
 package com.example.assignment3.Your.Name_COMP303_AssignementNumber.controllers;
+
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.assignment3.Your.Name_COMP303_AssignementNumber.exceptionHanlders.ObjectNotFoundInDbException;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.models.Enrollment;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.models.DTO.EnrollmentDTO;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.services.EnrollmentServices;
@@ -7,6 +10,7 @@ import com.example.assignment3.Your.Name_COMP303_AssignementNumber.services.Enro
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +32,21 @@ public class EnrollmentController {
         return enrollmentServices.addNewEnrollment(enrollment);
     }
 
+    // @GetMapping("/get/{id}")
+    // public Optional<Enrollment> getEnrollment(@PathVariable int id) {
+
+    // return Optional.ofNullable(enrollmentServices.getById(id))
+    // .orElseThrow(() -> new ObjectNotFoundInDbException("Enrollment not found with
+    // ID: " + id));
+    // }
+
     @GetMapping("/get/{id}")
-    public Optional<Enrollment> getEnrollment(@PathVariable int id) {
-        return Optional.ofNullable(enrollmentServices.getById(id)).orElseGet(null);
+    public Enrollment getEnrollment(@PathVariable int id) throws NoSuchElementException {
+        Enrollment enrollment = enrollmentServices.getById(id).orElse(null);
+        if(enrollment == null){
+            throw new NoSuchElementException("Enrollment Was not found with id " + id);
+        }
+        return enrollment;
     }
 
     @GetMapping("/get/all")
@@ -39,25 +55,25 @@ public class EnrollmentController {
     }
 
     @PutMapping("/update/{id}")
-    public Enrollment updateEnrollment(@PathVariable int id, @RequestBody EnrollmentDTO enrollmentDTO) {
+    public Enrollment updateEnrollment(@PathVariable int id, @Valid @RequestBody EnrollmentDTO enrollmentDTO) {
         return enrollmentServices.modifyEnrollment(id, enrollmentDTO);
     }
 
     // @DeleteMapping("/delete/{id}")
-    //  public Map<String, String> deleteEnrollment(@PathVariable int id)
-    //  {
-    //     Map<String, String> message = new HashMap<>();
-    //     if(enrollmentServices.removeEnrollment(id))
-    //     {
-    //         message.put("message", "Record with "+id+" has been deleted");
-    //     }
-    //     else
-    //     {
-    //         message.put("message", "Recoord with "+ id+ " has not found");
-    //     }
+    // public Map<String, String> deleteEnrollment(@PathVariable int id)
+    // {
+    // Map<String, String> message = new HashMap<>();
+    // if(enrollmentServices.removeEnrollment(id))
+    // {
+    // message.put("message", "Record with "+id+" has been deleted");
+    // }
+    // else
+    // {
+    // message.put("message", "Recoord with "+ id+ " has not found");
+    // }
 
-    //     return message;
+    // return message;
 
-    //  }
+    // }
 
 }

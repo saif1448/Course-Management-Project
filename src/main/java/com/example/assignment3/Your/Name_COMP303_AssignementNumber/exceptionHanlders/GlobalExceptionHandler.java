@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,54 @@ public class GlobalExceptionHandler {
         // errorResponse.setHttpError(httpError);
         // errorResponse.setHttpErrorCode(httpErrorCode);
         // errorResponse.setErrorList(errorList);
+
+        ErrorResponse errorResponse = ErrorResponse.builder().timestamp(timestamp)
+                .httpError(httpError)
+                .httpErrorCode(httpErrorCode)
+                .errorList(errorList)
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<?> noSuchElementHandle(NoSuchElementException exception) {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        int httpErrorCode = status.value();
+        String httpError = status.toString();
+        List<Map<String, String>> errorList = new ArrayList<>();
+
+        Map<String, String> errors = new HashMap<String, String>();
+
+      
+        errors.put(exception.getClass().getName(), exception.getMessage());
+        errorList.add(errors);
+
+        ErrorResponse errorResponse = ErrorResponse.builder().timestamp(timestamp)
+                .httpError(httpError)
+                .httpErrorCode(httpErrorCode)
+                .errorList(errorList)
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleAllException(Exception exception) {
+        Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        int httpErrorCode = status.value();
+        String httpError = status.toString();
+        List<Map<String, String>> errorList = new ArrayList<>();
+
+        Map<String, String> errors = new HashMap<String, String>();
+
+        errors.put(exception.getClass().getName(), exception.getMessage());
+
+        errorList.add(errors);
 
         ErrorResponse errorResponse = ErrorResponse.builder().timestamp(timestamp)
                 .httpError(httpError)

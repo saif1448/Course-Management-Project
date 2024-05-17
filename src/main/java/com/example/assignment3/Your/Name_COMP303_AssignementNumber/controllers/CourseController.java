@@ -3,14 +3,20 @@ package com.example.assignment3.Your.Name_COMP303_AssignementNumber.controllers;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.assignment3.Your.Name_COMP303_AssignementNumber.commonModels.ErrorResponse;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.models.Course;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.models.DTO.CourseDTO;
 import com.example.assignment3.Your.Name_COMP303_AssignementNumber.services.CourseServices;
@@ -39,7 +45,7 @@ public class CourseController {
         return new ResponseEntity<>(courseServices.addNewCourse(course), HttpStatus.CREATED);
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_XML_VALUE)
     public ResponseEntity<?> getCourse(@PathVariable int id) {
         // return Optional.ofNullable(courseServices.getById(id)).orElseGet(null);
         Course course = courseServices.getById(id).orElse(null);
@@ -50,6 +56,35 @@ public class CourseController {
             Map<String, String> errorResponse = new HashMap<String, String>();
             errorResponse.put("error", "Course was not found fot that ID");
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
+    @GetMapping(path = "/get/json/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCourseJson(@PathVariable int id) {
+        // return Optional.ofNullable(courseServices.getById(id)).orElseGet(null);
+        Course course = courseServices.getById(id).orElse(null);
+
+        if (course != null) {
+            return new ResponseEntity<>(course, HttpStatus.OK);
+        } else {
+            Map<String, String> errorResponse = new HashMap<String, String>();
+            errorResponse.put("error", "Course was not found fot that ID");
+
+            Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+            int httpErrorCode = status.value();
+            String httpError = status.toString();
+            List<Map<String, String>> errorList = new ArrayList<>();
+
+            errorList.add(errorResponse);
+
+            ErrorResponse erResponse = new ErrorResponse().builder().timestamp(timestamp)
+                                        .httpError(httpError)
+                                        .httpErrorCode(httpErrorCode)
+                                        .errorList(errorList).build();
+
+            return new ResponseEntity<>(erResponse, HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -68,11 +103,11 @@ public class CourseController {
     public ResponseEntity<?> deleteCourse(@PathVariable int id) {
         Map<String, String> message = new HashMap<>();
 
-        Course course = courseServices.removeCourse(id);
+        boolean isDeleted = courseServices.removeCourse(id);
         HttpStatus status = null;
-        if (course != null) {
+        if (isDeleted) {
             message.put("message", "Record with " + id + " has been deleted");
-            message.put("course", course.toString());
+            message.put("course id:", id+"");
             status = HttpStatus.ACCEPTED;
 
         } else {

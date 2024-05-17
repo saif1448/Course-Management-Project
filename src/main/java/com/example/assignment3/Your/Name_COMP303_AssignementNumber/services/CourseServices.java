@@ -79,16 +79,17 @@ public class CourseServices {
         return course;
     }
 
-    public Course removeCourse(int id) {
+    public boolean removeCourse(int id) {
 
         Optional<Course> entity = courseRepository.findById(id);
 
         Course course = entity.orElse(null);
         if (course != null) {
             courseRepository.delete(course);
+            return true;
         }
 
-        return course;
+        return false;
     }
 
 }
